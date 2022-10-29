@@ -75,6 +75,11 @@ public class MultipleFileUploadTest {
         exception = e;
       }
     }
+
+    @Override
+    public String toString() {
+      return("Local file:" + localFile + " Remote file:" + remoteName);
+    }
   }
 
   public MultipleFileUploadTest(String accountName, String accessToken,
@@ -132,6 +137,7 @@ public class MultipleFileUploadTest {
     for(OneFileUploader oneFileUploader : uploaders) {
       Exception ioException = oneFileUploader.getException();
       if (ioException != null) {
+        System.err.println("Exception occurred for: " + oneFileUploader);
         throw ioException;
       }
     }
