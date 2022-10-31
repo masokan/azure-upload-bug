@@ -13,6 +13,9 @@ import com.azure.storage.file.datalake.DataLakePathClientBuilder;
 import com.azure.storage.file.datalake.DataLakeServiceClientBuilder;
 import com.azure.storage.file.datalake.models.PathInfo;
 
+import com.azure.core.http.policy.HttpLogDetailLevel;
+import com.azure.core.http.policy.HttpLogOptions;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -89,9 +92,13 @@ public class MultipleFileUploadTest {
     StorageSharedKeyCredential credential
         = new StorageSharedKeyCredential(accountName, accessToken);
     serviceClientBuilder = new DataLakeServiceClientBuilder()
-                               .endpoint(endpoint).credential(credential);
+                               .endpoint(endpoint).credential(credential)
+                               .httpLogOptions(new HttpLogOptions()
+                               .setLogLevel(HttpLogDetailLevel.HEADERS));
     pathClientBuilder = new DataLakePathClientBuilder()
-                            .endpoint(endpoint).credential(credential);
+                            .endpoint(endpoint).credential(credential)
+                            .httpLogOptions(new HttpLogOptions()
+                            .setLogLevel(HttpLogDetailLevel.HEADERS));
     this.localDirName = localDirName;
     this.remoteDirName = remoteDirName;
   }
