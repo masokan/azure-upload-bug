@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -91,14 +92,23 @@ public class MultipleFileUploadTest {
                           "https://%s.dfs.core.windows.net", accountName);
     StorageSharedKeyCredential credential
         = new StorageSharedKeyCredential(accountName, accessToken);
+    HashSet<String> queryParams = new HashSet<>();
+    queryParams.add("recursive");
+    queryParams.add("resource");
+    queryParams.add("action");
+    queryParams.add("position");
+    queryParams.add("retainUncommittedData");
+    queryParams.add("close");
     serviceClientBuilder = new DataLakeServiceClientBuilder()
                                .endpoint(endpoint).credential(credential)
                                .httpLogOptions(new HttpLogOptions()
-                               .setLogLevel(HttpLogDetailLevel.HEADERS));
+                               .setLogLevel(HttpLogDetailLevel.HEADERS)
+                               .setAllowedQueryParamNames(queryParams));
     pathClientBuilder = new DataLakePathClientBuilder()
                             .endpoint(endpoint).credential(credential)
                             .httpLogOptions(new HttpLogOptions()
-                            .setLogLevel(HttpLogDetailLevel.HEADERS));
+                            .setLogLevel(HttpLogDetailLevel.HEADERS)
+                            .setAllowedQueryParamNames(queryParams));
     this.localDirName = localDirName;
     this.remoteDirName = remoteDirName;
   }
