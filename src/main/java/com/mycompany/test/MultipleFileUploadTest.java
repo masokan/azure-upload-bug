@@ -126,6 +126,7 @@ public class MultipleFileUploadTest {
     for (i = 0; i < numDirs; i++) {
       String subdirName = remoteDirName + "/dir_" + i;
       System.err.println("Creating remote directory " + subdirName);
+      pathComponents = splitPath(subdirName);
       // Create the remote subdirectories
       fileSystemClient.createDirectoryIfNotExists(pathComponents[1]);
     }
@@ -134,7 +135,7 @@ public class MultipleFileUploadTest {
       File localFile = new File(localDirName, "f_" + i);
       // Create the local file
       createLocalFile(localFile, 10*1024L);
-      String remotePath = remoteDirName + "/dir_" + i % numDirs + "/f_" + i;
+      String remotePath = remoteDirName + "/dir_" + i + "/f_" + i;
       uploaders[i] = new OneFileUploader(localFile, remotePath);
     }
     System.err.println("Creating upload requests");
@@ -237,7 +238,7 @@ public class MultipleFileUploadTest {
           = new MultipleFileUploadTest(args[0], args[1], args[3], args[4]);
       try {
         int numFiles = Integer.parseInt(args[2]);
-        test.runTest(numFiles, 10, 10);
+        test.runTest(numFiles, numFiles, numFiles);
         System.out.println("Test successful");
       } finally {
         test.deleteRemoteDir(args[4]);
